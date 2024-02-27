@@ -65,7 +65,7 @@ export default function App() {
     useEffect(() => {
         if (opened.length === doublePokemon.length) {
             setTimeout(() => {
-                alert('You win!');
+                alert('you won!');
             }, 100);
             
         }
