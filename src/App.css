@@ -45,10 +45,14 @@ p strong {
   outline: none;
   font-family: 'Patrick Hand', sans-serif;
 }
+/* tricks is here, when add flipped class, then will be a transform */
+/* when add flipped class, will perform a 3D Y rotate, so back comes to front */
 
 .pokemon-card.flipped .inner {
   transform: rotateY(180deg);
 }
+
+/*Key attribute is transform-style: preserve-3d, which regards 3D*/
 
 .inner {
   position: relative;
