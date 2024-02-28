@@ -25,18 +25,8 @@ export default function App() {
 	// should be another state to check if the
 	const [count, setCount] = useState(0); // count of moves
 
-	function checkMatch(toPair) {
-		if (toPair.length !== 2)
-			return console.warn('toPair should have exactly 2 items');
 
-		if (doublePokemon[toPair[0]].id !== doublePokemon[toPair[1]].id) {
-			setOpened((opened) =>
-				opened.filter((i) => i !== toPair[0] && i !== toPair[1])
-			);
-		}
-		setIsMatching(false);
-	}
-
+        
 	function flipCard(index) {
 		// if same card was clicked do nothing
 		if (opened.includes(index)) return;
@@ -49,18 +39,26 @@ export default function App() {
 		setCount((count) => count + 1);
 		// add the card to the pair array
 		setToPair((toPair) => {
-			const newToPair = [...toPair, index];
-			if (newToPair.length === 2) {
-				setIsMatching(true);
-				setTimeout(() => {
-					checkMatch(newToPair);
-				}, 800);
-				return [];
-			} else {
-				return newToPair;
-			}
+            return [...toPair, index]
 		});
 	}
+
+    // useEffect to check if the to-pair cards are matching
+    useEffect(() => {
+        if (toPair.length <= 1) return;
+        // this limit the user to flip more cards while comparing
+        setIsMatching(true);
+        setTimeout(() => {
+            if (doublePokemon[toPair[0]].id !== doublePokemon[toPair[1]].id) {
+            setOpened((opened) =>
+                opened.filter((i) => i !== toPair[0] && i !== toPair[1])
+            );  
+            } 
+            setToPair([]);
+            setIsMatching(false);
+        }, 600);
+    },[toPair]);
+
 	// useEffect to check if the game is over
 	useEffect(() => {
 		if (opened.length === doublePokemon.length) {
