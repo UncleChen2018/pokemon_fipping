@@ -20,28 +20,28 @@ export default function App() {
 	const [opened, setOpened] = useState([]); // using index | this state only have 2 items max with the selection from user
 	// the cards wait to be matched
 	const [toPair, setToPair] = useState([]); // using index | this state only have 2 items max with the selection from user
-    const [isMatching, setIsMatching] = useState(false);
+	const [isMatching, setIsMatching] = useState(false);
 
 	// should be another state to check if the
 	const [count, setCount] = useState(0); // count of moves
 
-    function checkMatch(toPair) {
-        if (toPair.length === 2) {
-            if (doublePokemon[toPair[0]].id !== doublePokemon[toPair[1]].id) {
-                setOpened((opened) => opened.filter((i) => i !== toPair[0] && i !== toPair[1]));
-               
-            }
-            setIsMatching(false);
-        }else{
-            new Error('toPair should have 2 items');
-        }
-    }
+	function checkMatch(toPair) {
+		if (toPair.length !== 2)
+			return console.warn('toPair should have exactly 2 items');
+
+		if (doublePokemon[toPair[0]].id !== doublePokemon[toPair[1]].id) {
+			setOpened((opened) =>
+				opened.filter((i) => i !== toPair[0] && i !== toPair[1])
+			);
+		}
+		setIsMatching(false);
+	}
 
 	function flipCard(index) {
 		// if same card was clicked do nothing
 		if (opened.includes(index)) return;
-        // still comparing, do nothing
-        if (isMatching) return;
+		// still comparing, do nothing
+		if (isMatching) return;
 		// add the index to the opened array
 		// the opened array can only have even items
 		setOpened((opened) => [...opened, index]);
@@ -49,27 +49,26 @@ export default function App() {
 		setCount((count) => count + 1);
 		// add the card to the pair array
 		setToPair((toPair) => {
-            const newToPair = [...toPair, index];
-            if (newToPair.length === 2) {
-                setIsMatching(true);
-                setTimeout(() => {
-                checkMatch(newToPair);
-                },800);
-                return [];
-            } else {
-                return newToPair;
-            }
-        });
+			const newToPair = [...toPair, index];
+			if (newToPair.length === 2) {
+				setIsMatching(true);
+				setTimeout(() => {
+					checkMatch(newToPair);
+				}, 800);
+				return [];
+			} else {
+				return newToPair;
+			}
+		});
 	}
-    // useEffect to check if the game is over
-    useEffect(() => {
-        if (opened.length === doublePokemon.length) {
-            setTimeout(() => {
-                alert('you won!');
-            }, 100);
-            
-        }
-    }, [opened]);
+	// useEffect to check if the game is over
+	useEffect(() => {
+		if (opened.length === doublePokemon.length) {
+			setTimeout(() => {
+				alert('you won!');
+			}, 100);
+		}
+	}, [opened]);
 
 	return (
 		<div className='app'>
